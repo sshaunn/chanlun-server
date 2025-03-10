@@ -1,0 +1,104 @@
+# 基础配置文件 - 所有环境共享
+
+# 应用基本信息
+app:
+  name: chanlun-server
+  version: 1.0.0
+  description: A股分析和筛选系统
+
+# 服务器配置
+server:
+  host: 0.0.0.0
+  port: 8080
+  debug: false
+  secret_key: your_default_secret_key_here
+  max_content_length: 16MB
+  request_timeout: 60  # 请求超时时间(秒)
+
+# API配置
+api:
+  prefix: /api/v1
+  rate_limit:
+    enabled: true
+    limit_per_minute: 60  # 每分钟请求限制
+  cors:
+    enabled: true
+    allowed_origins: "*"
+
+# 缓存配置
+cache:
+  dir: ./stock_cache
+  expiry_days: 1  # 缓存过期时间(天)
+  stock_list_expiry_hours: 24  # 股票列表缓存过期时间(小时)
+  stock_data_expiry_hours: 6  # 股票数据缓存过期时间(小时)
+  clean_interval_hours: 24  # 缓存清理间隔(小时)
+
+# 数据获取配置
+data_fetch:
+  max_workers: 5  # 并行获取数据的最大线程数
+  retry_times: 3  # 获取失败时的重试次数
+  retry_interval: 5  # 重试间隔(秒)
+  default_period: daily  # 默认数据周期
+  akshare_version: 1.16.39  # 使用的Akshare版本
+
+# 股票数据配置
+stock:
+  default_start_date_days: 365  # 默认往前获取的天数
+  max_stocks_per_request: 100  # 单次请求允许的最大股票数
+
+# 策略配置
+strategy:
+  config_dir: strategies  # 策略配置文件目录
+  default_strategy: rsi  # 默认策略类型
+
+# 日志配置
+logging:
+  level: INFO
+  file: logs/app.log
+  max_size: 10MB
+  backup_count: 5
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# 数据库配置(预留)
+database:
+  enabled: false
+  type: sqlite  # sqlite, mysql, postgresql
+  # SQLite配置
+  sqlite:
+    path: ./data/stocks.db
+  # MySQL配置
+  mysql:
+    host: localhost
+    port: 3306
+    database: a_stock_analyzer
+    username: root
+    password: password
+    charset: utf8mb4
+    pool_size: 5
+    max_overflow: 10
+  # PostgreSQL配置
+  postgresql:
+    host: localhost
+    port: 5432
+    database: a_stock_analyzer
+    username: postgres
+    password: password
+    pool_size: 5
+    max_overflow: 10
+
+# 安全配置
+security:
+  jwt:
+    enabled: false
+    secret_key: your_jwt_secret_key_here
+    token_expiry_minutes: 60
+  api_key:
+    enabled: false
+    keys: []  # 预留API Key列表
+
+# 监控配置
+monitoring:
+  enabled: false
+  prometheus:
+    enabled: false
+    endpoint: /metrics
